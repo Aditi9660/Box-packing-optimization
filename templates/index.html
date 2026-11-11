@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USPS Box Packing Optimizer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════════════════ -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <span class="header-icon">📦</span>
+      <div>
+        <h1>USPS Box Packing Optimizer</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-reset" class="btn btn-danger">Reset Session</button>
+    </div>
+  </div>
+</header>
+
+<main class="app-main">
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     LEFT COLUMN – Inputs
+═══════════════════════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+
+  <!-- Products -->
+  <section class="card" id="sec-products">
+    <div class="card-header">
+      <h2>Products</h2>
+      <button id="btn-add-row" class="btn btn-sm btn-secondary">+ Add Row</button>
+    </div>
+    <div class="table-scroll">
+      <table id="tbl-products">
+        <thead>
+          <tr>
+            <th>ITEM</th>
+            <th>L (in)</th>
+            <th>W (in)</th>
+            <th>H (in)</th>
+            <th>Wt (lbs)</th>
+            <th>Qty</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tbl-body">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">Dimensions in inches · Weight in pounds</p>
+  </section>
+
+  <!-- Box Capacities -->
+  <section class="card" id="sec-capacities">
+    <div class="card-header">
+      <h2>Box Capacity Limits</h2>
+      <span class="badge">lbs</span>
+    </div>
+    <div class="capacity-grid">
+      <label>
+        <span class="cap-name">Small Flat Rate</span>
+        <span class="cap-dim">8.6878 × 5.4375 × 1.75 in</span>
+        <input type="number" id="cap-small" value="70" min="0.1" step="0.1" />
+      </label>
+      <label>
+        <span class="cap-name">Medium – Top Load</span>
+        <span class="cap-dim">11.25 × 8.75 × 6.0 in</span>
+        <input type="number" id="cap-medium-top" value="70" min="0.1" step="0.1" />
+      </label>
+      <label>
+        <span class="cap-name">Medium – Side Load</span>
+        <span class="cap-dim">14.0 × 12.0 × 3.5 in</span>
+        <input type="number" id="cap-medium-side" value="70" min="0.1" step="0.1" />
+      </label>
+      <label>
+        <span class="cap-name">Large Flat Rate</span>
+        <span class="cap-dim">12.25 × 12.25 × 6.0 in</span>
+        <input type="number" id="cap-large" value="70" min="0.1" step="0.1" />
+      </label>
+    </div>
+  </section>
+
+  <!-- Action buttons -->
+  <div class="action-row">
+    <button id="btn-pack" class="btn btn-primary btn-lg">⚡ Pack</button>
+  </div>
+  <div id="status-bar" class="status-bar hidden"></div>
+
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     RIGHT COLUMN – Results
+═══════════════════════════════════════════════════════════════════════ -->
+<section class="results-col">
+
+  <!-- Analytics Banner -->
+  <div id="analytics-banner" class="analytics-banner hidden">
+    <div class="analytic-card">
+      <span class="analytic-value" id="an-boxes">–</span>
+      <span class="analytic-label">Boxes Used</span>
+    </div>
+    <div class="analytic-card">
+      <span class="analytic-value" id="an-packed">–</span>
+      <span class="analytic-label">Items Packed</span>
+    </div>
+    <div class="analytic-card">
+      <span class="analytic-value" id="an-unpacked">–</span>
+      <span class="analytic-label">Unpacked</span>
+    </div>
+    <div class="analytic-card">
+      <span class="analytic-value" id="an-weight">–</span>
+      <span class="analytic-label">Total Weight (lbs)</span>
+    </div>
+    <div class="analytic-card">
+      <span class="analytic-value" id="an-util">–</span>
+      <span class="analytic-label">Avg Utilization</span>
+    </div>
+  </div>
+
+  <!-- Box cards -->
+  <div id="results-container"></div>
+
+  <!-- Logs -->
+  <details id="logs-section" class="card logs-card hidden">
+    <summary class="logs-summary">
+      <span>Packing Logs</span>
+      <span id="log-count" class="badge"></span>
+    </summary>
+    <pre id="log-output" class="log-pre"></pre>
+  </details>
+
+</section>
+
+</main>
+
+<script src="/static/box3d.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
